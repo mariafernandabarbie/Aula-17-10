@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const createUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        await User.create({  name, email, password  });
+        await User.create({ name, email, password });
         res.json('User registration successful');
     } catch (error) {
         console.error(`Error: ${error}`);
@@ -67,7 +67,7 @@ const authenticateUser = async (req, res) => {
 
         if (isUserAuthenticated) {
             const token = jwt.sign({ id: email }, secret.secret, { expiresIn: 86400 });
-            res.json({
+            res.cookie('token', token, { httpOnly: true }).json({
                 name: isUserAuthenticated.name,
                 email: isUserAuthenticated.email,
                 token: token
